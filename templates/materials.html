@@ -1,0 +1,25 @@
+<h2>Materials for {{ course_name }}</h2>
+
+<ul>
+  {% for material in materials %}
+    <li>
+      {% with material.file.name|lower as filename %}
+        {% if ".pdf" in filename %}
+          📄 <a href="{{ material.file.url }}" target="_blank">{{ material.title }}</a>
+
+        {% elif ".mp4" in filename or ".mov" in filename %}
+          🎬 <strong>{{ material.title }}</strong><br>
+          <video width="320" height="240" controls>
+            <source src="{{ material.file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+
+        {% else %}
+          📎 <a href="{{ material.file.url }}" download>{{ material.title }}</a>
+        {% endif %}
+      {% endwith %}
+    </li>
+  {% empty %}
+    <p>No materials available for this course.</p>
+  {% endfor %}
+</ul>

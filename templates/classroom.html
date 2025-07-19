@@ -1,0 +1,146 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Classroom - Submit Assignments</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+  body {
+  background: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.assignment-card {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  padding: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+.assignment-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.drop-zone {
+  border: 2px dashed #007bff;
+  padding: 25px;
+  border-radius: 12px;
+  background: #e9f5ff;
+  text-align: center;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.drop-zone.dragover {
+  background: #d6ebff;
+  border-color: #0056b3;
+}
+
+.drop-zone p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #007bff;
+}
+
+.submission-closed {
+  color: #dc3545;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #444;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">📚 Classroom Assignments</h2>
+
+    {% for assignment in assignments %}
+    <div class="assignment-card">
+      <h4>{{ assignment.title }}</h4>
+      <p>{{ assignment.description }}</p>
+      <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+      <p><a href="{{ assignment.file.url }}" target="_blank">📎 Download Attachment</a></p>
+
+      {% if assignment.due_date > now %}
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
+
+        <div class="drop-zone my-3" data-input-id="fileInput{{ forloop.counter }}"
+          data-label-id="fileLabel{{ forloop.counter }}">
+          <p>📤 Drag & drop your file here or click to upload</p>
+          <input type="file" name="file" id="fileInput{{ forloop.counter }}" style="display: none;" required>
+          <div id="fileLabel{{ forloop.counter }}" class="file-name">No file selected</div>
+        </div>
+
+        <input type="text" name="student_name" class="form-control my-2" placeholder="Your Name" required>
+        <input type="text" name="roll_number" class="form-control my-2" placeholder="Roll Number" required>
+        <textarea name="comments" class="form-control my-2" placeholder="Comments (optional)"></textarea>
+
+        <button type="submit" name="submit" class="btn btn-success">✅ Submit Assignment</button>
+
+        {% if last_submission and last_submission.id %}
+          {% if last_submission.id|stringformat:"s" %}
+            <a href="{% url 'chat_submission' last_submission.id %}" class="btn btn-outline-primary mt-3">
+              💬 Chat with Instructor
+            </a>
+          {% endif %}
+        {% endif %}
+
+      </form>
+      {% else %}
+      <p class="submission-closed">⛔ Submission Closed</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    document.querySelectorAll('.drop-zone').forEach(dropZone => {
+      const inputId = dropZone.getAttribute('data-input-id');
+      const labelId = dropZone.getAttribute('data-label-id');
+      const fileInput = document.getElementById(inputId);
+      const fileLabel = document.getElementById(labelId);
+
+      dropZone.addEventListener("click", () => fileInput.click());
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+      });
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        fileInput.files = e.dataTransfer.files;
+        fileLabel.innerText = e.dataTransfer.files[0].name;
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        fileLabel.innerText = e.target.files[0].name;
+      });
+    });
+  </script>
+
+</body>
+
+</html>

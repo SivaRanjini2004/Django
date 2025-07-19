@@ -1,0 +1,208 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    /* Banner Styling */
+    .banner {
+      background: linear-gradient(to right, #4CAF50, #2E8B57);
+      width: 100%;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    /* Header Section Styling */
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px 30px;
+      background-color: #ffffff;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      width: 100px;
+      margin-right: 20px;
+    }
+
+    .header-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .header-text span.red {
+      color: #E6120E;
+    }
+
+    .header-text span.green {
+      color: #2D9A3E;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      background-color: #002366;
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 20px;
+      font-size: 16px;
+    }
+
+    .nav-bar a:hover {
+      text-decoration: underline;
+      color: #f8f9fa;
+    }
+
+    /* Main Content Section */
+    .container {
+      margin-top: 30px;
+      padding: 0 15px;
+    }
+
+    .about-image {
+      width: 70%;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+    }
+
+    h4 {
+      color: #2E8B57;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      margin: 20px;
+      text-align: justify;
+    }
+
+    /* Card Section for Courses */
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .card-text {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      border: none;
+      font-weight: 600;
+      border-radius: 5px;
+      padding: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+    }
+
+    /* Card Layout */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .col-md-3, .col-sm-6 {
+      padding: 15px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header Section -->
+  <div class="container-fluid header">
+      <img src="{% static 'img/books.jpg' %}" alt="Logo">
+      <div class="header-text">
+          <span class="red">Online Education</span>
+          <span class="green">Portal System</span>
+      </div>
+  </div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar text-center">
+      <a href="{% url 'Student_main' %}">Home</a>
+      <a href="{% url 'explore' %}">Explore</a>
+      <a href="{% url 'my_dashboard' %}">My Dashboard</a>
+      <a href="{% url 'change_password' %}">Change Password</a>
+  </nav>
+  <div class="container-fluid bg-3 text-center mt-4">    
+    <div class="row justify-content-center">
+      {% for i in courses %}
+        <div class="col-md-3 col-sm-6 mb-4">
+          <div class="card h-100 shadow-sm">
+            <img src="{{ i.course_image.url }}" class="card-img-top img-fluid" alt="{{ i.course_name }}" style="height: 200px; object-fit: cover;">
+            
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ i.course_name }}</h5>
+              <p class="card-text">{{ i.course_description }}</p>
+              <p class="text-muted">{{ i.course_duration }} months</p>
+  
+              <!-- Enroll Button -->
+              <a href="{% url 'enroll' %}?course_name={{ i.course_name }}" class="btn btn-success btn-block">Enroll</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  

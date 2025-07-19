@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Submissions - {{ assignment.title }}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .submission-list {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .submission-item {
+      padding: 12px;
+      border-bottom: 1px solid #eaeaea;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .submission-item:last-child {
+      border-bottom: none;
+    }
+
+    .chat-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+    }
+
+    .chat-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h3 class="text-primary">📥 Submissions for: {{ assignment.title }}</h3>
+
+    <div class="submission-list mt-4">
+      <!-- {% for submission in submissions %}
+      <div class="submission-item">
+        <div>
+          <strong>{{ submission.student_name }}</strong> ({{ submission.roll_number }})<br>
+          Submitted: {{ submission.submitted_at|date:"d M Y, H:i" }}
+        </div>
+        <a href="{% url 'chat_submission' submission.id %}" class="chat-btn">💬 Chat</a>
+      </div>
+    {% empty %}
+      <p>No submissions yet.</p>
+    {% endfor %} -->
+      {% for submission in submissions %}
+      <div class="submission-item">
+        <div>
+          <strong>{{ submission.student_name }}</strong> ({{ submission.roll_number }})<br>
+          Submitted: {{ submission.submitted_at|date:"d M Y, H:i" }}<br>
+
+          {% if submission.file %}
+          📎 <a href="{{ submission.file.url }}" target="_blank">{{ submission.file.name|cut:"submissions/" }}</a>
+          {% endif %}
+        </div>
+        <a href="{% url 'chat_submission' submission.id %}" class="chat-btn">💬 Chat</a>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</body>
+
+</html>

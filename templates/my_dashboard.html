@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2 class="text-center">My Dashboard</h2>
+        <hr>
+        {% if enrollments %}
+        <table class="table table-bordered mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Enrollment Date</th>
+                    <th>Course Name</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for enroll in enrollments %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <!-- ID as serial number -->
+                    <td>{{ enroll.student_name }}</td>
+                    <td>{{ enroll.email }}</td>
+                    <td>{{ enroll.date_time }}</td> <!-- Use datetime instead of enrollment_date -->
+                    <td>{{ enroll.course_name }}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center">No enrollment records found.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

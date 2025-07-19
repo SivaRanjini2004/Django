@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .header img {
+            width: 100px;
+            margin-right: 15px;
+        }
+        .header-text {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .header-text span.red {
+            color: red;
+        }
+        .header-text span.green {
+            color: green;
+        }
+        .nav-bar {
+            background-color: #002366;
+            padding: 15px;
+        }
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+        .nav-bar a:hover {
+            text-decoration: underline;
+        }
+
+        .container-fluid {
+            position: relative;
+        }
+
+        .bottom-right {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .bottom-right a {
+            text-decoration: none;
+        }
+
+        .bottom-right .btn {
+            border: none;
+            color: white;
+            background-color: #28a745;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #002366;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+        }
+
+        .dropdown-menu a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #003366;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-toggle::after {
+            display: inline-block;
+            margin-left: 0.255em;
+            vertical-align: 0.255em;
+            content: "";
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Header -->
+    <div class="container-fluid header">
+        <img src="{% static 'img/books.jpg' %}" alt="Logo">
+        <div class="header-text">
+            <span class="red">Online Education</span>
+            <span class="green">Portal System</span>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar text-center">
+        <a href="{% url 'instructor_main' %}">Home</a>
+        <a href="#">my_board</a>
+        <a href="#">student view</a>
+        <a href="{% url 'instructor_view' %}">instructor view</a>
+        <a href="{% url 'logout' %}">LOGOUT</a>
+        <div class="dropdown" style="display: inline-block;">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" style="color: white;">
+                Welcome {{ request.user.username }}
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'assignment' %}">assignment</a></li>
+                <li><a class="dropdown-item" href="{% url 'upload_material' %}">classes and notes</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">LOGOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mt-4">
+        <center>
+            <h2 style="font-family: 'Monotype Corsiva'; color: #E6120E; font-weight: bold;">
+                View Students
+            </h2>
+        </center>
+        <hr>
+
+        <table class="table table-bordered mt-3" id="myTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>Sr. No</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Last Login</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in pro %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.username }}</td>
+                    <td>{{ i.last_login }}</td>
+                    <td>{{ i.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

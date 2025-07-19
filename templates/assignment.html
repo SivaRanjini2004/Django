@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Password</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .banner {
+      background: linear-gradient(to right, #4CAF50, #2E8B57);
+      width: 100%;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .about-image {
+      width: 60%;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h4 {
+      color: #2E8B57;
+      font-size: 26px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      margin: 20px;
+    }
+
+    .content-box {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      width: 100px;
+      margin-right: 15px;
+    }
+
+    .header-text {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .header-text span.red {
+      color: red;
+    }
+
+    .header-text span.green {
+      color: green;
+    }
+
+    .nav-bar {
+      background-color: #002366;
+      padding: 15px;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 15px;
+    }
+
+    .nav-bar a:hover {
+      text-decoration: underline;
+    }
+
+    .container-fluid {
+      position: relative;
+    }
+
+    .bottom-right {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .bottom-right a {
+      text-decoration: none;
+    }
+
+    .bottom-right .btn {
+      border: none;
+      color: white;
+      background-color: #28a745;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 class="text-primary text-center mb-4">📤 Upload New Assignment</h2>
+
+  <div class="upload-box">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>Assignment Title</label>
+        <input type="text" name="title" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>Description (optional)</label>
+        <textarea name="description" class="form-control" rows="4"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Attach File</label>
+        <input type="file" name="file" class="form-control-file" required>
+      </div>
+
+      <div class="form-group">
+        <label>Due Date</label>
+        <input type="datetime-local" name="due_date" class="form-control" required>
+      </div>
+
+      <button type="submit" name="upload" class="btn btn-success">✅ Upload Assignment</button>
+    </form>
+  </div>
+
+  <hr>
+
+  <h4 class="text-secondary mb-3">📚 All Uploaded Assignments</h4>
+
+  {% for assignment in assignments %}
+    <div class="assignment-card">
+      <strong>{{ assignment.title }}</strong><br>
+      {{ assignment.description }}<br>
+      📎 <a href="{{ assignment.file.url }}" target="_blank">View File</a><br>
+      🕒 Due Date: {{ assignment.due_date }}<br>
+      📅 Uploaded: {{ assignment.created_at|date:"d M Y, H:i" }}
+
+      <a href="{% url 'view_submissions' assignment.id %}" class="btn btn-outline-primary btn-sm mt-2">💬 View Chats</a>
+
+
+      <form method="post" action="{% url 'delete_assignment' assignment.id %}" style="margin-top:10px;">
+        {% csrf_token %}
+        <button type="submit" class="delete-btn">🗑 Delete</button>
+      </form>
+    </div>
+  {% empty %}
+    <p>No assignments uploaded yet.</p>
+  {% endfor %}
+</div>
+
+</body>
+</html>

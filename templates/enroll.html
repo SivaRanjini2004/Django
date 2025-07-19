@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enroll</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .banner {
+      background: linear-gradient(to right, #4CAF50, #2E8B57);
+      width: 100%;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .container {
+      margin-top: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      width: 100px;
+      margin-right: 15px;
+    }
+
+    .header-text {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .header-text span.red {
+      color: red;
+    }
+
+    .header-text span.green {
+      color: green;
+    }
+
+    .nav-bar {
+      background-color: #002366;
+      padding: 15px;
+    }
+
+    .nav-bar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 15px;
+    }
+
+    .nav-bar a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      border: none;
+      font-weight: 600;
+      border-radius: 5px;
+      padding: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+    }
+
+    /* Style for Form Container */
+    .form-container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h3 {
+      color: #2E8B57;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header Section -->
+  <div class="container-fluid header">
+      <img src="{% static 'img/books.jpg' %}" alt="Logo">
+      <div class="header-text">
+          <span class="red">Online Education</span>
+          <span class="green">Portal System</span>
+      </div>
+  </div>
+  <form method="POST" action="{% url 'enroll' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="student_name">Student Name</label>
+      <input type="text" class="form-control" id="student_name" name="student_name" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="course_name">Course name</label>
+      <input type="text" class="form-control" id="course_name" name="course_name" value="{{ course_name }}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="datetime">Date and Time</label>
+      <input type="text" class="form-control" id="datetime" name="datetime" value="{{ current_time }}" readonly>
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+  

@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat - {{ submission.student_name }}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .chat-container {
+      max-width: 700px;
+      margin: auto;
+      margin-top: 40px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .message {
+      padding: 10px 15px;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      max-width: 70%;
+    }
+
+    .instructor {
+      background-color: #d1e7dd;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .student {
+      background-color: #e2e3e5;
+      align-self: flex-start;
+      margin-right: auto;
+    }
+
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: #888;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <h4 class="text-primary">💬 Chat with {{ submission.student_name }}</h4>
+  <p><a href="{{ submission.file.url }}" target="_blank">📎 View Submitted File</a></p>
+
+  <div class="chat-box mb-4">
+    {% for msg in messages %}
+      <div class="message {{ msg.sender }}">
+        {{ msg.message }}
+        <div class="timestamp">{{ msg.timestamp|date:"d M Y, H:i" }} </div>
+      </div>
+    {% empty %}
+      <p>No messages yet.</p>
+    {% endfor %}
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="sender" value="instructor">
+    <textarea name="message" rows="3" class="form-control mb-2" placeholder="Type your message..." required></textarea>
+    <button type="submit" class="btn btn-success">Send</button>
+  </form>
+</div>
+
+</body>
+</html>
